@@ -3,7 +3,7 @@ import pathlib
 import time
 import tqdm
 from udacity_gym import UdacitySimulator, UdacityGym, UdacityAction
-from udacity_gym.agent import PIDUdacityAgent, DaveUdacityAgent
+from udacity_gym.agent import PIDUdacityAgent, DaveUdacityAgent, SupervisedAgent
 from udacity_gym.agent_callback import LogObservationCallback
 
 if __name__ == '__main__':
@@ -11,11 +11,11 @@ if __name__ == '__main__':
     # Configuration settings
     host = "127.0.0.1"
     port = 4567
-    simulator_exe_path = "/home/banana/projects/self-driving-car-sim/Builds/udacity_linux.x86_64"
+    simulator_exe_path = "/home/jiaqq/Documents/Builds/udacity_linux.x86_64"
 
-    # Track settings
+    # 4 track variable settings
     track = "lake"
-    daytime = "daynight"
+    daytime = "day"
     weather = "sunny"
     log_directory = pathlib.Path(f"udacity_dataset_lake_dave/{track}_{weather}_{daytime}")
 
@@ -40,8 +40,9 @@ if __name__ == '__main__':
         time.sleep(1)
 
     log_observation_callback = LogObservationCallback(log_directory)
+
     agent = DaveUdacityAgent(
-        checkpoint_path="dave2-v3.ckpt",
+        checkpoint_path="dave2.ckpt",
         before_action_callbacks=[],
         after_action_callbacks=[log_observation_callback]
     )

@@ -36,12 +36,20 @@ class UdacityGym(gym.Env):
 
         # Initialize the gym environment
         # steering + throttle, action space must be symmetric
+
+        # continuous action space under Reinforcement learning
+        # all possible actions that one can take
         self.action_space = spaces.Box(
-            low=np.array([-max_steering, -max_throttle]),
-            high=np.array([max_steering, max_throttle]),
-            dtype=np.float32,
+            low=np.array([-max_steering, -max_throttle]), #minimum value of the action
+            high=np.array([max_steering, max_throttle]), #maximum value of the action
+            dtype=np.float32, # data type
         )
+
+        # continuous observation_space under Reinforcement learning
+        # represent the way that one perceives the environment
         self.observation_space = spaces.Box(
+            # image data with pixel values between 0 and 255
+            # 3: color channels; 160*320: pixel dimentions; standard image date type
             low=0, high=255, shape=input_shape, dtype=np.uint8
         )
 
@@ -59,11 +67,15 @@ class UdacityGym(gym.Env):
         observation = self.simulator.step(action)
 
         # TODO: fix the two Falses
+        # ?
+        # cte: Cross Track Error
         return observation, observation.cte, False, False, {
             'events': self.simulator.sim_state['events'],
             'episode_metrics': self.simulator.sim_state['episode_metrics'],
         }
 
+
+    # insitial state of th env
     def reset(self, **kwargs) -> tuple[UdacityObservation, dict[str, Any]]:
 
         # TODO: make reset synchronous

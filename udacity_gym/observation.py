@@ -34,6 +34,7 @@ class UdacityObservation:
     def is_ready(self):
         return self.input_image is not None and self.semantic_segmentation is not None
 
+    # observation by getting coordinate each time
     def get_metrics(self):
         return {
             'pos_x': self.position[0],

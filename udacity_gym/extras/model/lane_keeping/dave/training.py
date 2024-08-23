@@ -18,7 +18,7 @@ torch.set_float32_matmul_precision('high')
 
 def random_flip(x, y):
     if random.random() > 0.5:
-        return torchvision.transforms.functional.hflip(x), -y
+        return torchvision.transforms.functional.hflip(x), -y # 随机水平翻转图像，并相应地翻转转向角度y
     return x, y
 
 
@@ -29,9 +29,9 @@ class DrivingDataset(Dataset):
         self.metadata = pd.read_csv(self.dataset_dir.joinpath('log.csv'))
         self.split = split
         if self.split == "train":
-            self.metadata = self.metadata[10: int(len(self.metadata) * 0.9)]
+            self.metadata = self.metadata[10: int(len(self.metadata) * 0.9)] # 排除前 10 个样本
         else:
-            self.metadata = self.metadata[int(len(self.metadata) * 0.9):]
+            self.metadata = self.metadata[int(len(self.metadata) * 0.9) : 10]
         if transform == None:
             self.transform = torchvision.transforms.Compose([
                 torchvision.transforms.AugMix(),

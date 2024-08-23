@@ -3,9 +3,9 @@ import pathlib
 
 # Paths
 PROJECT_DIR = pathlib.Path(__file__).parent.parent.absolute()
-RESULT_DIR = pathlib.Path("/media/banana/data/results/udacity-gym")  # TODO: remove hardcoded path
-CHECKPOINT_DIR = pathlib.Path("/media/banana/data/models/udacity-gym")  # TODO: remove hardcoded path
-LOG_DIR = pathlib.Path("/media/banana/data/logs/udacity-gym")  # TODO: remove hardcoded path
+RESULT_DIR = pathlib.Path("./data/results/udacity-gym")  # TODO: remove hardcoded path
+CHECKPOINT_DIR = pathlib.Path("./data/models/udacity-gym")  # TODO: remove hardcoded path
+LOG_DIR = pathlib.Path("./data/logs/udacity-gym")  # TODO: remove hardcoded path
 
 # Device settings
 ACCELERATOR = "gpu"  # choose between gpu or cpu

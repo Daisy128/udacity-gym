@@ -7,7 +7,7 @@ from .action import UdacityAction
 from .logger import CustomLogger
 from .observation import UdacityObservation
 from .unity_process import UnityProcess
-
+from .executor import UdacityExecutor
 
 # TODO: it should extend an abstract simulator
 class UdacitySimulator:
@@ -20,15 +20,18 @@ class UdacitySimulator:
     ):
         # Simulator path
         self.simulator_exe_path = sim_exe_path
+
+        # UnityProcess
         self.sim_process = UnityProcess()
+
         # Simulator network settings
-        from .executor import UdacityExecutor
+        # UdacityExecutor
         self.sim_executor = UdacityExecutor(host, port)
         self.host = host
         self.port = port
         # Simulator logging
         self.logger = CustomLogger(str(self.__class__))
-        # Simulator state
+        # Simulator state, values defined in the end of the code
         self.sim_state = simulator_state
 
         # Verify binary location
@@ -36,8 +39,12 @@ class UdacitySimulator:
             self.logger.error(f"Executable binary to the simulator does not exists. "
                               f"Check if the path {self.simulator_exe_path} is correct.")
 
+    # Reinforcement learning
+    # Provide information about the new state of the env after the 'action'
+    # Receive an action, apply it to sim_state
+    # return the observations after the action
     def step(self, action: UdacityAction):
-        self.sim_state['action'] = action
+        self.sim_state['action'] = action # 2 vars: steering_angle + throttle
         return self.observe()
 
     def observe(self):
