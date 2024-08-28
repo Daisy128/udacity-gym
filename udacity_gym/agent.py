@@ -1,23 +1,20 @@
 import pathlib
-import tensorflow as tf
 from tensorflow.keras.models import load_model
 import numpy as np
 import os
-import cv2
 from .extras.model.lane_keeping.chauffeur.chauffeur_model import Chauffeur
 from .extras.model.lane_keeping.dave.dave_model import Dave2
 # import pygame
 import torch
 import torchvision
 import tf2onnx
-import onnx
 from onnx2pytorch import ConvertModel
 
 from .action import UdacityAction
 from .extras.model.lane_keeping.epoch.epoch_model import Epoch
 from .extras.model.lane_keeping.vit.vit_model import ViT
 from .observation import UdacityObservation
-
+from utils.utils import preprocess
 
 class UdacityAgent:
 
@@ -134,7 +131,7 @@ class DaveUdacityAgent(UdacityAgent):
                 map_location=torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
             )
         elif self.model_type=="Tensorflow":
-            loaded_model = tf.keras.models.load_model(self.checkpoint_path)
+            loaded_model = load_model(self.checkpoint_path)
             onnx_model, _ = tf2onnx.convert.from_keras(loaded_model)
             self.model = ConvertModel(onnx_model)
         else:
@@ -176,24 +173,23 @@ class SupervisedAgent(UdacityAgent):
         # assert检查模型路径是否存在，不存在抛出错误信息
         assert os.path.exists(model_path), 'Model path {} not found'.format(model_path)
 
-        self.model = tf.keras.models.load_model(model_path)
+        self.model = load_model(model_path)
         self.predict_throttle = predict_throttle
         self.max_speed = max_speed
         self.min_speed = min_speed
 
     def action(self, observation: UdacityObservation, *args, **kwargs) -> UdacityAction:
         # observation by getting coordinate each time
-        obs = observation.input_image
-        # 扩展为4D数组, normalize to [0,1]
-        obs = np.expand_dims(obs, axis=0).astype('float32') / 127.5 - 1  # Add batch dimension and normalize
-        print("Observations:", obs)
-        obs = cv2.resize(obs[0], (160, 80), interpolation=cv2.INTER_AREA) 
-        obs = cv2.cvtColor(obs, cv2.COLOR_RGB2YUV)
-        obs = np.expand_dims(obs, axis=0)
-        speed = observation.speed
+        obs = observation.input_image # batch of images
 
-        # the model expects 4D array
-        #obs = np.array([obs])
+        #print("Observations:", obs)
+        obs = preprocess(obs)
+        
+        #  the model expects 4D array
+        obs = np.array([obs])
+
+        # obs = torch.transforms.Normalize(obs_mean,obs_std)
+        speed = observation.speed        
     
         if self.predict_throttle:
             action = self.model.predict(obs, batch_size=1, verbose=0)
