@@ -37,7 +37,8 @@ def preprocess(image):
     Combine all preprocess functions into one
     """
     image = np.array(image)
-    image_0 = image.astype('uint8')
+
+    image_0 = (image*255).astype('uint8') # ! In this way, input image has to be [0,1]
 
     # pre-normalize to [0, 1]:
     # if max_val >= 1.0 and max_val <= 255.0:
@@ -51,6 +52,6 @@ def preprocess(image):
     image_yuv = rgb2yuv(image_resize)
     image_nor = normalize(image_yuv)
     
-    print_image(image_0, image_resize, image_yuv, image_nor)
+    # print_image(image_0, image_resize, image_yuv, image_nor)
 
     return image_nor

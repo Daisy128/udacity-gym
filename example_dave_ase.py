@@ -40,7 +40,7 @@ if __name__ == '__main__':
         print("Waiting for environment to set up...")
         time.sleep(1)
 
-    model_path = "./models/track1-dave2-mc-final.h5"    
+    model_path = "./models/track1-dave2-007.h5"    
     log_observation_callback = LogObservationCallback(log_directory)
     agent = SupervisedAgent(model_path=model_path,
                             max_speed=40,

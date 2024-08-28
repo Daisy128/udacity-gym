@@ -197,7 +197,7 @@ class SupervisedAgent(UdacityAgent):
         else:
             import time
             time_start = time.time()
-            steering = float(self.model.predict(obs, batch_size=1, verbose=0)[0])
+            steering = float(self.model.predict(obs, batch_size=1, verbose=1)[0])
             print("DNN elasped time ",time.time() - time_start)
             steering = np.clip(steering, -1, 1)
             if speed > self.max_speed:
