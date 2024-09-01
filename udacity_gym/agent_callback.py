@@ -67,7 +67,8 @@ class LogObservationCallback(AgentCallback):
     def __call__(self, observation: UdacityObservation, *args, **kwargs):
         super().__call__(observation, *args, **kwargs)
         metrics = observation.get_metrics()
-
+        #metrics['time'] = f"{observation.time:020d}"
+        print(observation.time)
         image_name = f"image_{observation.time:020d}.jpg"
         observation.input_image.save(self.image_path.joinpath(image_name))
         metrics['image_filename'] = image_name
@@ -83,6 +84,7 @@ class LogObservationCallback(AgentCallback):
             metrics['shadow_predicted_steering_angle'] = kwargs['shadow_action'].steering_angle
             metrics['shadow_predicted_throttle'] = kwargs['shadow_action'].throttle
         self.logs.append(metrics)
+        print(self.logs)
 
         if self.enable_pygame_logging:
             pixel_array = np.swapaxes(np.array(observation.input_image), 0, 1)
@@ -92,7 +94,7 @@ class LogObservationCallback(AgentCallback):
 
     def save(self):
         logging_dataframe = pd.DataFrame(self.logs)
-        logging_dataframe = logging_dataframe.set_index('time', drop=True)
+        #?bug logging_dataframe = logging_dataframe.set_index('time', drop=True)
         logging_dataframe.to_csv(self.logging_file)
         if self.enable_pygame_logging:
             pygame.quit()

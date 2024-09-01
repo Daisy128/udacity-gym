@@ -3,9 +3,15 @@ import pathlib
 import time
 import tqdm
 import os
+from enum import Enum
 from udacity_gym import UdacitySimulator, UdacityGym, UdacityAction
 from udacity_gym.agent import PIDUdacityAgent, DaveUdacityAgent, SupervisedAgent
 from udacity_gym.agent_callback import LogObservationCallback
+
+class Track(Enum):
+    track1 = "lake"
+    track2 = "jungle"
+    track3 = "mountain"
 
 if __name__ == '__main__':
 
@@ -40,11 +46,12 @@ if __name__ == '__main__':
         print("Waiting for environment to set up...")
         time.sleep(1)
 
-    model_path = "./models/track1-dave2-007.h5"    
+    model_path = f"./models/{Track(track).name}-dave2-final.h5"
+   # model_path = "./models/track1-dave2-20240901_213047-final.h5"  
     log_observation_callback = LogObservationCallback(log_directory)
     agent = SupervisedAgent(model_path=model_path,
                             max_speed=40,
-                            min_speed=15,
+                            min_speed=10,
                             predict_throttle=False)
 
     # Interacting with the gym environment
