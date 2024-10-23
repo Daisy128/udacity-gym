@@ -197,8 +197,8 @@ class SupervisedAgent(UdacityAgent):
         else:
             import time
             time_start = time.time()
-            steering = float(self.model.predict(obs, batch_size=1, verbose=1)[0])
-            print("DNN elasped time ",time.time() - time_start)
+            steering = float(self.model.predict(obs, batch_size=1, verbose=0)[0])
+            #print("DNN elasped time ",time.time() - time_start)
             steering = np.clip(steering, -1, 1)
             if speed > self.max_speed:
                 speed_limit = self.min_speed  # slow down
@@ -210,7 +210,7 @@ class SupervisedAgent(UdacityAgent):
 
             throttle = np.clip(a=1.0 - steering ** 2 - (speed / speed_limit) ** 2, a_min=0.0, a_max=1.0)
 
-            print(f"steering {steering} throttle {throttle}")
-            self.model.summary()
+            #print(f"steering {steering} throttle {throttle}")
+            #self.model.summary()
 
         return UdacityAction(steering_angle=steering, throttle=throttle)

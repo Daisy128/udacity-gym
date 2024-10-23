@@ -18,10 +18,10 @@ if __name__ == '__main__':
     # Configuration settings
     host = "127.0.0.1"
     port = 4567
-    simulator_exe_path = "/home/jiaqq/Documents/Builds/udacity_linux.x86_64"
+    simulator_exe_path = "/home/jiaqq/Documents/builds_v2/udacity.x86_64"
 
     # 4 track variable settings
-    track = "lake"
+    track = "mountain"
     daytime = "day"
     weather = "sunny"
     log_directory = pathlib.Path(f"udacity_dataset_lake_dave/{track}_{weather}_{daytime}")
@@ -43,25 +43,36 @@ if __name__ == '__main__':
     # Wait for environment to set up
     while not observation or not observation.is_ready():
         observation = env.observe()
-        print("Waiting for environment to set up...")
+        #print("Waiting for environment to set up...")
         time.sleep(1)
 
-    model_path = f"./models/{Track(track).name}-dave2-final.h5"
-   # model_path = "./models/track1-dave2-20240901_213047-final.h5"  
+    model_path = f"./models/{Track(track).name}/track3-dave2-mc-final.h5"#014 final
+    #model_path = f"./models/{Track(track).name}-dave2-final copy.h5"
+
+    #print(model_path)
+
+    #model_path = "./models/track1-dave2-20240907_230759-final.h5"  
     log_observation_callback = LogObservationCallback(log_directory)
     agent = SupervisedAgent(model_path=model_path,
-                            max_speed=40,
-                            min_speed=10,
+                            max_speed=15,
+                            min_speed=6,
                             predict_throttle=False)
 
     # Interacting with the gym environment
-    for _ in tqdm.tqdm(range(500)):
-        action = agent(observation)
+    # tqdm.tqdm() creates a progress bar, consists of multiple steps where each step represents an action taken by the agent
+    # 2000: agent executes 2000 steps in total
+    for _ in tqdm.tqdm(range(6000)): 
+        action = agent(observation) # agent 根据当前的环境状态或观察值（observation）来选择一个动作
         last_observation = observation
+        # 强化学习, 输入一个动作，返回
+        # observation - 采取该动作后的环境状态; rewards - 采取该动作获得的奖励; 
+        # terminated - 当前 episode 是否结束, boolean; truncated - 是否因为某些条件（如时间限制）而提前终止 episode; 
+        # info - extra info, not compulsory
         observation, reward, terminated, truncated, info = env.step(action)
 
-        while observation.time == last_observation.time:
-            observation = env.observe()
+        # 代码持续观察环境的变化，直到时间更新为止, 确保每一步操作之间的时间确实发生变化
+        while observation.time == last_observation.time: # time equals, 环境处于同一个时间点
+            observation = env.observe() # inside while loop, keep observing
             time.sleep(0.005)
 
     if info:
@@ -70,6 +81,6 @@ if __name__ == '__main__':
     log_observation_callback.save()
     simulator.close()
     env.close()
-    print("Experiment concluded.")
+    #print("Experiment concluded.")
 
 

@@ -41,14 +41,15 @@ if __name__ == '__main__':
 
     log_observation_callback = LogObservationCallback(log_directory)
 
-    agent = DaveUdacityAgent(
-        checkpoint_path="dave2.ckpt",
-        before_action_callbacks=[],
-        after_action_callbacks=[log_observation_callback]
-    )
+    # agent = DaveUdacityAgent(
+    #     checkpoint_path="dave2.ckpt",
+    #     before_action_callbacks=[],
+    #     after_action_callbacks=[log_observation_callback]
+    # )
+    agent = PIDUdacityAgent()
 
     # Interacting with the gym environment
-    for _ in tqdm.tqdm(range(500)):
+    for _ in tqdm.tqdm(range(2000)):
         action = agent(observation)
         last_observation = observation
         observation, reward, terminated, truncated, info = env.step(action)

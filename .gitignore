@@ -34,3 +34,6 @@ unitylog.txt
 .cache
 nosetests.xml
 coverage.xml
+udacity_dataset_lake_dave/
+models/track1/
+models/track2/
