@@ -65,7 +65,7 @@ class UdacityExecutor:
         try:
             semantic_segmentation = Image.open(BytesIO(base64.b64decode(data["semantic_segmentation"])))
         except PIL.UnidentifiedImageError:
-            print("Segmentation camera image UnidentifiedImageError.")
+            #print("Segmentation camera image UnidentifiedImageError.")
             semantic_segmentation = None
 
         observation = UdacityObservation(

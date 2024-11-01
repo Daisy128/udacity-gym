@@ -27,6 +27,7 @@ import glob
 import os
 import platform
 import subprocess
+import time
 
 from .logger import CustomLogger
 
@@ -98,7 +99,7 @@ class UnityProcess(object):
 
             # if sim_path:
             # hack to wait for the simulator to start
-            # time.sleep(20)
+            time.sleep(5)
 
         self.logger.info("Unity subprocess started")
 

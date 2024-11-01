@@ -32,7 +32,7 @@ class UdacityObservation:
         self.time = time
 
     def is_ready(self):
-        return self.input_image is not None and self.semantic_segmentation is not None
+        return self.input_image is not None
 
     # observation by getting coordinate each time
     def get_metrics(self):

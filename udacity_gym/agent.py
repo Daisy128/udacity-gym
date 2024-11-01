@@ -189,7 +189,7 @@ class SupervisedAgent(UdacityAgent):
         obs = np.array([obs])
 
         # obs = torch.transforms.Normalize(obs_mean,obs_std)
-        speed = observation.speed        
+        speed = observation.speed
     
         if self.predict_throttle:
             action = self.model.predict(obs, batch_size=1, verbose=0)

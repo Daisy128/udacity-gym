@@ -21,7 +21,7 @@ if __name__ == '__main__':
     simulator_exe_path = "/home/jiaqq/Documents/builds_v2/udacity.x86_64"
 
     # 4 track variable settings
-    track = "mountain"
+    track = "lake"
     daytime = "day"
     weather = "sunny"
     log_directory = pathlib.Path(f"udacity_dataset_lake_dave/{track}_{weather}_{daytime}")
@@ -43,18 +43,13 @@ if __name__ == '__main__':
     # Wait for environment to set up
     while not observation or not observation.is_ready():
         observation = env.observe()
-        #print("Waiting for environment to set up...")
         time.sleep(1)
 
-    model_path = f"./models/{Track(track).name}/track3-dave2-mc-final.h5"#014 final
-    #model_path = f"./models/{Track(track).name}-dave2-final copy.h5"
+    model_path = f"./models/{Track(track).name}/1030_1/track1-dave2-mc-final.h5"
 
-    #print(model_path)
-
-    #model_path = "./models/track1-dave2-20240907_230759-final.h5"  
     log_observation_callback = LogObservationCallback(log_directory)
     agent = SupervisedAgent(model_path=model_path,
-                            max_speed=15,
+                            max_speed=25,
                             min_speed=6,
                             predict_throttle=False)
 

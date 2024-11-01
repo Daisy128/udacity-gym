@@ -11,7 +11,7 @@ if __name__ == '__main__':
     # Configuration settings
     host = "127.0.0.1"
     port = 4567
-    simulator_exe_path = "/home/banana/projects/self-driving-car-sim/Builds/udacity_linux.x86_64"
+    simulator_exe_path = "/home/jiaqq/Documents/builds_v2/udacity.x86_64"
 
     # Creating the simulator wrapper
     simulator = UdacitySimulator(
