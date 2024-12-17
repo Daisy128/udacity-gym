@@ -4,8 +4,8 @@ import time
 import tqdm
 import os
 from enum import Enum
-from udacity_gym import UdacitySimulator, UdacityGym, UdacityAction
-from udacity_gym.agent import PIDUdacityAgent, DaveUdacityAgent, SupervisedAgent
+from udacity_gym import UdacitySimulator, UdacityGym
+from udacity_gym.agent import SupervisedAgent
 from udacity_gym.agent_callback import LogObservationCallback
 
 class Track(Enum):
@@ -45,18 +45,18 @@ if __name__ == '__main__':
         observation = env.observe()
         time.sleep(1)
 
-    model_path = f"./models/{Track(track).name}/1030_1/track1-dave2-mc-final.h5"
+    model_path = f"./models/{Track(track).name}/track1-steer-throttle/track1-dave2-mc-final.h5"
 
     log_observation_callback = LogObservationCallback(log_directory)
     agent = SupervisedAgent(model_path=model_path,
-                            max_speed=25,
+                            max_speed=30,
                             min_speed=6,
-                            predict_throttle=False)
+                            predict_throttle=True)
 
     # Interacting with the gym environment
     # tqdm.tqdm() creates a progress bar, consists of multiple steps where each step represents an action taken by the agent
     # 2000: agent executes 2000 steps in total
-    for _ in tqdm.tqdm(range(6000)): 
+    for _ in tqdm.tqdm(range(4000)): 
         action = agent(observation) # agent 根据当前的环境状态或观察值（observation）来选择一个动作
         last_observation = observation
         # 强化学习, 输入一个动作，返回
@@ -64,6 +64,8 @@ if __name__ == '__main__':
         # terminated - 当前 episode 是否结束, boolean; truncated - 是否因为某些条件（如时间限制）而提前终止 episode; 
         # info - extra info, not compulsory
         observation, reward, terminated, truncated, info = env.step(action)
+        # image = np.array(observation.input_image)
+        # print(image)
 
         # 代码持续观察环境的变化，直到时间更新为止, 确保每一步操作之间的时间确实发生变化
         while observation.time == last_observation.time: # time equals, 环境处于同一个时间点
